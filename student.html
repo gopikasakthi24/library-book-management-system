@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LMS • Student</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header>
+    <div class="wrap" style="display:flex;justify-content:space-between;align-items:center">
+      <h1>👩‍🎓 Student • Library</h1>
+      <div><button class="btn" id="logout">Logout</button></div>
+    </div>
+  </header>
+
+  <main class="wrap grid grid-2">
+    <section class="card">
+      <h3>Available Books</h3>
+      <table class="table">
+        <thead><tr><th>ID</th><th>Title</th><th>Author</th><th>Avail</th><th>Action</th></tr></thead>
+        <tbody id="avail"></tbody>
+      </table>
+    </section>
+
+    <section class="card">
+      <h3>My Borrowed Books</h3>
+      <table class="table">
+        <thead><tr><th>Book ID</th><th>Title</th><th>Issued</th><th>Return</th></tr></thead>
+        <tbody id="mine"></tbody>
+      </table>
+      <p class="muted" style="margin-top:8px">Returning is a request: Admin will approve and update return date.</p>
+    </section>
+
+    <section class="card" style="grid-column:1/-1">
+      <h3>My Pending Requests</h3>
+      <table class="table">
+        <thead><tr><th>ID</th><th>Type</th><th>Book</th><th>Requested At</th><th>Status</th></tr></thead>
+        <tbody id="myreqs"></tbody>
+      </table>
+    </section>
+  </main>
+
+  <script>
+    async function getJSON(url){ const r=await fetch(url); if(!r.ok) throw new Error("req failed"); return r.json(); }
+    async function post(url, body){ const r=await fetch(url,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)}); if(!r.ok) throw new Error((await r.json()).error||"failed"); return r.json(); }
+
+    async function ensureStudent(){
+      const me = await getJSON("/whoami");
+      if(!me.user) return location.href="/";
+      if(me.user.role!=="student") return location.href="/admin.html";
+    }
+
+    async function loadLists(){
+      const books = await getJSON("/api/books");
+      document.getElementById("avail").innerHTML = books
+        .filter(b => b.available > 0)
+        .map(b => `<tr>
+          <td>${b.id}</td><td>${b.title}</td><td>${b.author}</td>
+          <td><span class="pill">${b.available}</span></td>
+          <td><button class="btn" onclick="reqBorrow(${b.id})">Request Borrow</button></td>
+        </tr>`).join("");
+
+      const mine = await getJSON("/api/mybooks");
+      document.getElementById("mine").innerHTML = mine
+        .map(m => `<tr>
+          <td>${m.bookId}</td><td>${m.title}</td><td>${m.issue_date}</td>
+          <td><button class="btn" onclick="reqReturn(${m.bookId})">Request Return</button></td>
+        </tr>`).join("");
+
+      const myreqs = await getJSON("/api/myrequests");
+      document.getElementById("myreqs").innerHTML = myreqs
+        .map(r => `<tr>
+          <td>${r.id}</td><td>${r.type}</td><td>${r.title}</td>
+          <td>${new Date(r.requested_at).toLocaleString()}</td><td>${r.status}</td>
+        </tr>`).join("");
+    }
+
+    async function reqBorrow(bookId){
+      try { await post("/api/request-borrow", {bookId}); await loadLists(); }
+      catch(e){ alert(e.message); }
+    }
+    window.reqBorrow = reqBorrow;
+
+    async function reqReturn(bookId){
+      try { await post("/api/request-return", {bookId}); await loadLists(); }
+      catch(e){ alert(e.message); }
+    }
+    window.reqReturn = reqReturn;
+
+    document.getElementById("logout").onclick = async () => { await post("/logout",{}); location.href="/"; };
+
+    (async () => {
+      await ensureStudent();
+      await loadLists();
+    })();
+  </script>
+</body>
+</html>
