@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LMS • Login / Sign up</title>
+  <link rel="stylesheet" href="/style.css">
+  <style> body {
+      margin: 0;
+      height: 100vh;
+      background-image: url("https://img.freepik.com/premium-photo/cartoon-illustration-library-interior-with-wooden-bookshelves-comfy-chairs-windows-plant_1022970-50634.jpg"); /* Your image file */
+      background-size: cover; /* Cover entire page */
+      background-position: center; /* Center image */
+      background-repeat: no-repeat; /* Avoid repeating */
+      font-family: Arial, sans-serif;
+      color: white;
+    }</style>
+</head>
+
+<body>
+  <header>
+<div class="wrap" style="display:flex;justify-content:center;align-items:center; padding:15px; background:linear-gradient(90deg, #0b1020, #1c2550); border-bottom:2px solid #6ea8ff;">
+  <!-- Logo and Title -->
+  <div style="display:flex;align-items:center;gap:15px;">
+    <img src="https://a.storyblok.com/f/286279/426x379/10b386af74/aamec_logo.webp" alt="Logo" style="height:60px;width:auto;filter:drop-shadow(0px 0px 6px rgba(255,255,255,0.5));">
+    <h1 style="margin:0; font-size:26px; font-weight:800; font-family:'Georgia', 'Times New Roman', serif; color:#e8ecff; text-shadow:2px 2px 6px rgba(0,0,0,0.6); letter-spacing:1px;">
+      AAMEC Library Management System 📚
+    </h1>
+  </div>
+</div>
+
+  </header>
+
+     <main style="display:flex; justify-content:center; align-items:center; min-height:80vh; padding:20px;">
+  <section style="background:linear-gradient(135deg, #5ee7df, #b490ca); width:100%; max-width:600px; padding:35px; border-radius:16px; box-shadow:0 6px 25px rgba(0,0,0,0.4); color:#fff; font-family:'Segoe UI', sans-serif;">
+    
+    <!-- Title -->
+    <h2 style="text-align:center; margin-bottom:20px; font-size:26px; font-weight:700; text-shadow:1px 1px 4px rgba(0,0,0,0.3);">
+      Welcome to AAMEC Library Portal
+    </h2>
+    <p style="text-align:center; font-size:15px; margin-bottom:25px; color:#f9f9f9;">
+      Login as <b>Admin</b> to manage books, or <b>Student</b> to request borrows/returns.
+    </p>
+    
+    <!-- Tabs -->
+    <div style="display:flex; gap:10px; margin-bottom:20px;">
+      <button id="tab-login" 
+              style="flex:1; padding:12px; border:none; border-radius:8px; background:#0077b6; color:#fff; font-weight:600; cursor:pointer;">
+        Login
+      </button>
+      <button id="tab-signup" 
+              style="flex:1; padding:12px; border:none; border-radius:8px; background:#ffffff33; color:#fff; font-weight:600; cursor:pointer;">
+        Sign up
+      </button>
+    </div>
+
+    <!-- Login Pane -->
+    <div id="pane-login">
+      <div style="display:flex; flex-direction:column; gap:15px;">
+        <div>
+          <label style="font-size:15px; font-weight:600; color:#222;">Username</label>
+          <input id="login-username" placeholder="yourname"
+                 style="width:100%; padding:10px; border-radius:6px; border:none; margin-top:5px;"/>
+        </div>
+        <div>
+          <label style="font-size:15px; font-weight:600; color:#222;">Password</label>
+          <input id="login-password" type="password" placeholder="••••••••"
+                 style="width:100%; padding:10px; border-radius:6px; border:none; margin-top:5px;"/>
+        </div>
+      </div>
+      <button id="login-btn" 
+              style="margin-top:20px; width:100%; padding:12px; border:none; border-radius:8px; background:#023e8a; color:#fff; font-weight:600; cursor:pointer;">
+        Login
+      </button>
+      <div id="login-err" style="color:#ffdddd; margin-top:8px; font-size:14px;"></div>
+    </div>
+
+    <!-- Signup Pane -->
+    <div id="pane-signup" style="display:none;">
+      <div style="display:flex; flex-direction:column; gap:15px;">
+        <div>
+          <label style="font-size:15px; font-weight:600; color:#222;">Username</label>
+          <input id="su-username" placeholder="newuser"
+                 style="width:100%; padding:10px; border-radius:6px; border:none; margin-top:5px;"/>
+        </div>
+        <div>
+          <label style="font-size:15px; font-weight:600; color:#222;">Password</label>
+          <input id="su-password" type="password" placeholder="min 4 chars"
+                 style="width:100%; padding:10px; border-radius:6px; border:none; margin-top:5px;"/>
+        </div>
+        <div>
+          <label style="font-size:15px; font-weight:600; color:#222;">Role</label>
+          <select id="su-role" 
+                  style="width:100%; padding:10px; border-radius:6px; border:none; margin-top:5px;">
+            <option value="student">Student</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+      </div>
+      <button id="signup-btn" 
+              style="margin-top:20px; width:100%; padding:12px; border:none; border-radius:8px; background:#06d6a0; color:#fff; font-weight:600; cursor:pointer;">
+        Create Account
+      </button>
+      <div id="signup-err" style="color:#ffdddd; margin-top:8px; font-size:14px;"></div>
+    </div>
+    
+  </section>
+</main>
+
+    
+      
+
+  <script>
+    // Tabs
+    const loginPane = document.getElementById("pane-login");
+    const signupPane = document.getElementById("pane-signup");
+    const tabLogin = document.getElementById("tab-login");
+    const tabSignup = document.getElementById("tab-signup");
+    tabLogin.onclick = () => { loginPane.style.display="block"; signupPane.style.display="none"; tabLogin.classList.remove("ghost"); tabSignup.classList.add("ghost"); }
+    tabSignup.onclick = () => { loginPane.style.display="none"; signupPane.style.display="block"; tabSignup.classList.remove("ghost"); tabLogin.classList.add("ghost"); }
+
+    async function post(url, body){
+      const r = await fetch(url, {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(body)});
+      if(!r.ok) throw new Error((await r.json()).error || "Request failed");
+      return r.json();
+    }
+
+    document.getElementById("login-btn").onclick = async () => {
+      const u = document.getElementById("login-username").value.trim();
+      const p = document.getElementById("login-password").value.trim();
+      const err = document.getElementById("login-err");
+      err.textContent = "";
+      try {
+        const res = await post("/login", {username:u, password:p});
+        location.href = res.role === "admin" ? "/admin.html" : "/student.html";
+      } catch (e) { err.textContent = e.message; }
+    };
+
+    document.getElementById("signup-btn").onclick = async () => {
+      const u = document.getElementById("su-username").value.trim();
+      const p = document.getElementById("su-password").value.trim();
+      const r = document.getElementById("su-role").value;
+      const err = document.getElementById("signup-err");
+      err.textContent = "";
+      try {
+        if (p.length < 4) throw new Error("Password too short");
+        await post("/signup", {username:u, password:p, role:r});
+        const res = await post("/login", {username:u, password:p});
+        location.href = res.role === "admin" ? "/admin.html" : "/student.html";
+      } catch (e) { err.textContent = e.message; }
+    };
+  </script>
+</body>
+</html>
