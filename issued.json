@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "username": "student1",
+    "bookId": 1,
+    "title": "Clean Code",
+    "issue_date": "2025-08-24",
+    "return_date": "2025-08-24"
+  },
+  {
+    "id": 2,
+    "username": "student1",
+    "bookId": 3,
+    "title": "The Pragmatic Programmer",
+    "issue_date": "2025-08-24",
+    "return_date": null
+  },
+  {
+    "id": 3,
+    "username": "student1",
+    "bookId": 2,
+    "title": "Atomic Habits",
+    "issue_date": "2025-08-24",
+    "return_date": null
+  }
+]
