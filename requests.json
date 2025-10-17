@@ -1,0 +1,92 @@
+[
+  {
+    "id": 1,
+    "type": "borrow",
+    "username": "student1",
+    "bookId": 1,
+    "title": "Clean Code",
+    "requested_at": "2025-08-24T08:10:22.473Z",
+    "status": "approved"
+  },
+  {
+    "id": 2,
+    "type": "borrow",
+    "username": "student1",
+    "bookId": 2,
+    "title": "Atomic Habits",
+    "requested_at": "2025-08-24T08:10:39.602Z",
+    "status": "approved"
+  },
+  {
+    "id": 3,
+    "type": "borrow",
+    "username": "student1",
+    "bookId": 3,
+    "title": "The Pragmatic Programmer",
+    "requested_at": "2025-08-24T08:10:41.060Z",
+    "status": "approved"
+  },
+  {
+    "id": 4,
+    "type": "return",
+    "username": "student1",
+    "bookId": 1,
+    "title": "Clean Code",
+    "requested_at": "2025-08-24T08:12:15.463Z",
+    "status": "approved"
+  },
+  {
+    "id": 5,
+    "type": "return",
+    "username": "student1",
+    "bookId": 3,
+    "title": "The Pragmatic Programmer",
+    "requested_at": "2025-08-24T08:12:19.906Z",
+    "status": "pending"
+  },
+  {
+    "id": 6,
+    "type": "borrow",
+    "username": "anbarasi",
+    "bookId": 1,
+    "title": "Clean Code",
+    "requested_at": "2025-08-24T08:14:08.680Z",
+    "status": "pending"
+  },
+  {
+    "id": 7,
+    "type": "borrow",
+    "username": "dheepiks",
+    "bookId": 1,
+    "title": "Clean Code",
+    "requested_at": "2025-08-24T08:48:52.819Z",
+    "status": "pending"
+  },
+  {
+    "id": 8,
+    "type": "borrow",
+    "username": "dheepiks",
+    "bookId": 2,
+    "title": "Atomic Habits",
+    "requested_at": "2025-08-24T08:48:53.756Z",
+    "status": "pending"
+  },
+  {
+    "id": 9,
+    "type": "borrow",
+    "username": "Ashika",
+    "bookId": 1,
+    "title": "Clean Code",
+    "requested_at": "2025-10-05T09:36:41.494Z",
+    "status": "pending"
+  },
+  {
+    "id": 10,
+    "type": "borrow",
+    "username": "Ashika",
+    "bookId": 2,
+    "title": "Atomic Habits",
+    "requested_at": "2025-10-05T09:36:48.476Z",
+    "status": "pending"
+  }
+]
