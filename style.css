@@ -1,0 +1,55 @@
+:root{
+  --bg:#0b1020; --card:#111736; --border:#263066;
+  --muted:#9fb0ff; --text:#e8ecff; --accent:#6ea8ff;
+  --ok:#32d583; --warn:#fdb022; --bad:#ff5c5c;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; font-family: ui-sans-serif, system-ui, Segoe UI, Roboto, Arial;
+  background: radial-gradient(1200px 700px at 60% -10%, #20307133 20%, transparent 50%),
+              linear-gradient(120deg,#0b1020,#0f1630);
+  color:var(--text);
+}
+header{
+  padding:18px 24px; border-bottom:1px solid var(--border);
+  position:sticky; top:0; background:#0b1020cc; backdrop-filter:blur(6px); z-index:5;
+}
+.wrap{max-width:1200px; margin:0 auto; padding:22px}
+h1{margin:0;font-size:24px}
+h3{margin:6px 0 12px}
+.grid{display:grid; gap:16px}
+.grid-2{grid-template-columns:1fr 1fr}
+.grid-3{grid-template-columns:1fr 1fr 1fr}
+@media(max-width:950px){ .grid-2,.grid-3{grid-template-columns:1fr} }
+
+.card{
+  background:var(--card); border:1px solid var(--border);
+  border-radius:16px; padding:16px; box-shadow:0 8px 28px #00000040
+}
+label{font-size:12px;color:var(--muted)}
+input,select{
+  width:100%; padding:10px; background:#0d142e; color:var(--text);
+  border:1px solid var(--border); border-radius:10px; outline:none
+}
+.table{
+  width:100%; border-collapse:collapse; margin-top:10px
+}
+.table th,.table td{
+  padding:10px; border-bottom:1px solid var(--border); text-align:left
+}
+.table th{ color:var(--muted) }
+.btn{
+  padding:9px 13px; border-radius:10px; border:1px solid var(--border);
+  cursor:pointer; background:var(--accent); color:#081022; font-weight:700
+}
+.btn.ghost{ background:transparent; color:var(--text) }
+.btn.ok{ background:var(--ok); color:#00180c }
+.btn.bad{ background:var(--bad); color:#1b0000 }
+.pill{ padding:4px 10px; border:1px solid var(--border); border-radius:999px; font-size:12px }
+.row{ display:grid; grid-template-columns:1fr 1fr; gap:12px }
+.err{ color:#ff9aa2; font-size:12px; min-height:16px; margin-top:6px }
+.kbd{
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  background:#0d142e; border:1px solid var(--border); padding:2px 6px; border-radius:8px
+}
+
