@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LMS • Admin</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header>
+    <div class="wrap" style="display:flex;justify-content:space-between;align-items:center">
+      <h1>🛠️ Admin • Library</h1>
+      <div>
+        <a href="/admin-dashboard" class="btn ghost">Dashboard</a>
+        <button class="btn" id="logout">Logout</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap grid grid-2">
+    <section class="card">
+      <h3>Add Book</h3>
+      <label>Title</label>
+      <input id="title" placeholder="Book title"/>
+      <label>Author</label>
+      <input id="author" placeholder="Author"/>
+      <label>Copies</label>
+      <input id="copies" type="number" min="1" value="1"/>
+      <div style="margin-top:12px"><button class="btn" id="addBook">Save Book</button></div>
+      <div id="err" class="err"></div>
+    </section>
+
+    <section class="card">
+      <h3>Books</h3>
+      <table class="table">
+        <thead><tr><th>ID</th><th>Title</th><th>Author</th><th>Avail</th><th>Action</th></tr></thead>
+        <tbody id="bookList"></tbody>
+      </table>
+    </section>
+
+    <section class="card">
+      <h3>Pending Requests</h3>
+      <table class="table">
+        <thead><tr><th>ID</th><th>Type</th><th>Student</th><th>Book</th><th>Asked</th><th>Actions</th></tr></thead>
+        <tbody id="reqList"></tbody>
+      </table>
+    </section>
+
+    <section class="card">
+      <h3>Issues (History)</h3>
+      <table class="table">
+        <thead><tr><th>ID</th><th>User</th><th>Book</th><th>Issued</th><th>Returned</th></tr></thead>
+        <tbody id="issueList"></tbody>
+      </table>
+    </section>
+  </main>
+
+  <script>
+    async function getJSON(url){ const r=await fetch(url); if(!r.ok) throw new Error("req failed"); return r.json(); }
+    async function post(url, body){ const r=await fetch(url,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)}); if(!r.ok) throw new Error((await r.json()).error||"failed"); return r.json(); }
+    async function del(url){ const r=await fetch(url,{method:"DELETE"}); if(!r.ok) throw new Error((await r.json()).error||"failed"); return r.json(); }
+
+    async function ensureAdmin(){
+      const me = await getJSON("/whoami");
+      if(!me.user) return location.href="/";
+      if(me.user.role!=="admin") return location.href="/student.html";
+    }
+
+    async function loadBooks(){
+      const books = await getJSON("/api/books");
+      document.getElementById("bookList").innerHTML = books.map(b => `
+        <tr>
+          <td>${b.id}</td><td>${b.title}</td><td>${b.author}</td>
+          <td><span class="pill">${b.available}</span></td>
+          <td><button class="btn bad" onclick="deleteBook(${b.id})">Delete</button></td>
+        </tr>`).join("");
+    }
+
+    async function loadRequests(){
+      const reqs = await getJSON("/api/requests");
+      document.getElementById("reqList").innerHTML = reqs.map(r => `
+        <tr>
+          <td>${r.id}</td>
+          <td>${r.type}</td>
+          <td>${r.username}</td>
+          <td>${r.title}</td>
+          <td>${new Date(r.requested_at).toLocaleString()}</td>
+          <td>
+            <button class="btn ok" onclick="approve(${r.id})">Approve</button>
+            <button class="btn bad" onclick="rejectReq(${r.id})">Reject</button>
+          </td>
+        </tr>`).join("");
+    }
+
+    async function loadIssues(){
+      const issues = await getJSON("/api/issued");
+      document.getElementById("issueList").innerHTML = issues.map(i => `
+        <tr>
+          <td>${i.id}</td><td>${i.username}</td><td>${i.title}</td>
+          <td>${i.issue_date}</td><td>${i.return_date || "-"}</td>
+        </tr>`).join("");
+    }
+
+    document.getElementById("addBook").onclick = async () => {
+      const title = document.getElementById("title").value.trim();
+      const author = document.getElementById("author").value.trim();
+      const copies = parseInt(document.getElementById("copies").value || "1", 10);
+      const err = document.getElementById("err");
+      err.textContent = "";
+      try {
+        await post("/api/books", {title, author, available: copies});
+        document.getElementById("title").value = "";
+        document.getElementById("author").value = "";
+        document.getElementById("copies").value = "1";
+        await loadBooks();
+      } catch(e){ err.textContent = e.message; }
+    };
+
+    async function deleteBook(id){
+      try { await del("/api/books/"+id); await loadBooks(); }
+      catch(e){ alert(e.message); }
+    }
+    window.deleteBook = deleteBook;
+
+    async function approve(requestId){
+      try { await post("/api/requests/approve", {requestId}); await loadRequests(); await loadBooks(); await loadIssues(); }
+      catch(e){ alert(e.message); }
+    }
+    window.approve = approve;
+
+    async function rejectReq(requestId){
+      try { await post("/api/requests/reject", {requestId}); await loadRequests(); }
+      catch(e){ alert(e.message); }
+    }
+    window.rejectReq = rejectReq;
+
+    document.getElementById("logout").onclick = async () => {
+      await post("/logout", {});
+      location.href="/";
+    };
+
+    (async () => {
+      await ensureAdmin();
+      await loadBooks();
+      await loadRequests();
+      await loadIssues();
+    })();
+  </script>
+</body>
+</html>
+
